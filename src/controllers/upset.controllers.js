@@ -20,25 +20,33 @@ const createNewProduct = async (req, res) => {
     //     level: 0,
     // };
 
-    const productsPayload = req.body.products.map(product => ({
-        name: product.name,
-        category: product.category,
-        price: product.price,
-        rate: product.rate,
-        photo: product.photo,
-        i: 0, // Assume this field is required by Bubble API; adjust as necessary.
-        level: 0, // Same as above; adjust if needed.
-    }));
+    const productsPayload = req.body.products.map(product => {
+        const formattedSpecs = product.specs.map(spec => JSON.stringify({
+            key: spec.key,
+            value: spec.value
+        }));
+
+        return {
+            name: product.name,
+            category: product.category,
+            price: product.price,
+            rate: product.rate,
+            photo: product.photo,
+            specs: formattedSpecs,
+            i: 0, // Assume this field is required by Bubble API; adjust as necessary.
+            level: 0, // Same as above; adjust if needed.
+        }
+    });
 
     console.log(productsPayload);
 
     try {
-        
+
         for (const bubblePayload of productsPayload) {
 
             const response = await axios.post(`${apiUrl}/createNewProduct`, bubblePayload, { headers });
             console.log(`Product ${bubblePayload.name} uploaded successfully: `, response.data);
-        
+
             // If needed, include a delay between requests to avoid hitting rate limits
             await new Promise(resolve => setTimeout(resolve, 1000));
         }
