@@ -10,16 +10,6 @@ const headers = {
 
 const createNewProduct = async (req, res) => {
 
-    // const bubblePayload = {
-    //     name: req.body.name,
-    //     category: req.body.category,
-    //     price: req.body.price,
-    //     rate: req.body.rate,
-    //     photo: req.body.photo,
-    //     i: 0, //photo
-    //     level: 0,
-    // };
-
     const productsPayload = req.body.products.map(product => {
         const formattedSpecs = product.specs.map(spec => JSON.stringify({
             key: spec.key,
@@ -33,6 +23,10 @@ const createNewProduct = async (req, res) => {
             rate: product.rate,
             photo: product.photo,
             specs: formattedSpecs,
+            brand: product.brand,
+            asin: product.asin,
+            amazon_us_url: product.amazon_us_url,
+            description: product.description,
             i: 0, // Assume this field is required by Bubble API; adjust as necessary.
             level: 0, // Same as above; adjust if needed.
         }
