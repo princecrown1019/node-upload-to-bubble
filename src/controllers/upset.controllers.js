@@ -2,6 +2,7 @@ const axios = require("axios");
 
 const apiUrl = process.env.BUBBLE_API_URL;
 const apiKey = process.env.BUBBLE_API_KEY;
+const upsetIntervalTime = process.env.PRODUCT_UPSET_TIME;
 
 const headers = {
     'Authorization': `Bearer ${apiKey}`,
@@ -32,7 +33,6 @@ const createNewProduct = async (req, res) => {
         }
     });
 
-    console.log(productsPayload);
 
     try {
 
@@ -42,7 +42,7 @@ const createNewProduct = async (req, res) => {
             console.log(`Product ${bubblePayload.name} uploaded successfully: `, response.data);
 
             // If needed, include a delay between requests to avoid hitting rate limits
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise(resolve => setTimeout(resolve, upsetIntervalTime));
         }
 
 
@@ -57,22 +57,22 @@ const createNewProduct = async (req, res) => {
 
 }
 
-const createNewCategory = async (req, res) => {
+// const createNewCategory = async (req, res) => {
 
-    try {
-        const response = await axios.post(`${apiUrl}/createNewCategory`, req.body, {
-            headers: headers
-        });
+//     try {
+//         const response = await axios.post(`${apiUrl}/createNewCategory`, req.body, {
+//             headers: headers
+//         });
 
-        res.status(200).json(response.data);
-    } catch (error) {
-        console.error('Error creating new entry:', error);
-        res.status(500).json({ error: 'An error occurred while creating a new entry' });
-    }
+//         res.status(200).json(response.data);
+//     } catch (error) {
+//         console.error('Error creating new entry:', error);
+//         res.status(500).json({ error: 'An error occurred while creating a new entry' });
+//     }
 
-}
+// }
 
 module.exports = {
     createNewProduct,
-    createNewCategory,
+    // createNewCategory,
 };
